@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import { View, Text, TextInput, TouchableHighlight } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 
 export default class Login extends Component {
     render() {
@@ -12,10 +13,12 @@ export default class Login extends Component {
                 <View style={styles.container.form.view}>
                     <TextInput placeholder="E-mail" style={styles.container.form.input}/>
                     <TextInput placeholder="Senha" style={styles.container.form.input}/>
-                    <Text style={styles.container.form.text}>Não tem cadastro? Cadastre-se!</Text>
+                    <TouchableHighlight onPress = {() => Actions.cadastro() }>
+                        <Text style={styles.container.form.text}>Não tem cadastro? Cadastre-se!</Text>
+                    </TouchableHighlight>
                 </View>
                 <View style={styles.container.button.view}>
-                    <TouchableHighlight onPress = {() => false} style={styles.container.button.button}>
+                    <TouchableHighlight onPress = {() => false} style={styles.container.button.touchable}>
                         <Text style={styles.container.button.text}>Acessar</Text>
                     </TouchableHighlight>
                 </View>
@@ -56,7 +59,7 @@ const styles = {
             view: {
                 flex: 2
             },
-            button: {
+            touchable: {
                 padding: 10,
                 backgroundColor: "#115e54"
             },
