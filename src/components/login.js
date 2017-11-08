@@ -1,30 +1,30 @@
 
-import React, { Component } from 'react';
+import React from 'react';
 import { View, Text, TextInput, TouchableHighlight } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
 
-export default class Login extends Component {
-    render() {
-        return(
-            <View style={styles.container.view}>
-                <View style={styles.container.title.view}>
-                    <Text style={styles.container.title.text}>WhatsMesseger</Text>
-                </View>
-                <View style={styles.container.form.view}>
-                    <TextInput placeholder="E-mail" style={styles.container.form.input}/>
-                    <TextInput placeholder="Senha" style={styles.container.form.input}/>
-                    <TouchableHighlight onPress = {() => Actions.cadastro() }>
-                        <Text style={styles.container.form.text}>Não tem cadastro? Cadastre-se!</Text>
-                    </TouchableHighlight>
-                </View>
-                <View style={styles.container.button.view}>
-                    <TouchableHighlight onPress = {() => false} style={styles.container.button.touchable}>
-                        <Text style={styles.container.button.text}>Acessar</Text>
-                    </TouchableHighlight>
-                </View>
+const Login = props => {
+    console.log(props);
+    return(
+        <View style={styles.container.view}>
+            <View style={styles.container.title.view}>
+                <Text style={styles.container.title.text}>WhatsMesseger</Text>
             </View>
-        );
-    }
+            <View style={styles.container.form.view}>
+                <TextInput value={props.email} placeholder="E-mail" style={styles.container.form.input}/>
+                <TextInput  value={props.senha} placeholder="Senha" style={styles.container.form.input}/>
+                <TouchableHighlight onPress = {() => Actions.cadastro() }>
+                    <Text style={styles.container.form.text}>Não tem cadastro? Cadastre-se!</Text>
+                </TouchableHighlight>
+            </View>
+            <View style={styles.container.button.view}>
+                <TouchableHighlight onPress = {() => false} style={styles.container.button.touchable}>
+                    <Text style={styles.container.button.text}>Acessar</Text>
+                </TouchableHighlight>
+            </View>
+        </View>
+    );
 }
 
 const styles = {
@@ -71,4 +71,11 @@ const styles = {
             }
         }
     }
-}
+};
+
+const mapStateToProps = state => ({
+    email: state.AuthReducer.email,
+    senha: state.AuthReducer.senha
+});
+
+export default connect(mapStateToProps, null)(Login);
