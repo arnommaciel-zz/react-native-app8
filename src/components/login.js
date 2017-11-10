@@ -3,16 +3,16 @@ import React from 'react';
 import { View, Text, TextInput, TouchableHighlight } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import { setEmail } from '../actions/AuthActions';
 
 const Login = props => {
-    console.log(props);
     return(
         <View style={styles.container.view}>
             <View style={styles.container.title.view}>
                 <Text style={styles.container.title.text}>WhatsMesseger</Text>
             </View>
             <View style={styles.container.form.view}>
-                <TextInput value={props.email} placeholder="E-mail" style={styles.container.form.input}/>
+                <TextInput value={props.email} placeholder="E-mail" onChangeText={texto => props.setEmail(texto) } style={styles.container.form.input}/>
                 <TextInput  value={props.senha} placeholder="Senha" style={styles.container.form.input}/>
                 <TouchableHighlight onPress = {() => Actions.cadastro() }>
                     <Text style={styles.container.form.text}>Não tem cadastro? Cadastre-se!</Text>
@@ -73,9 +73,11 @@ const styles = {
     }
 };
 
-const mapStateToProps = state => ({
-    email: state.AuthReducer.email,
-    senha: state.AuthReducer.senha
-});
+const mapStateToProps = state => {
+    return ({
+        email: state.AuthReducer.email,
+        senha: state.AuthReducer.senha
+    });
+};
 
-export default connect(mapStateToProps, null)(Login);
+export default connect(mapStateToProps, { setEmail })(Login);
