@@ -1,9 +1,16 @@
 const INITIAL_STATE = {
     nome: '',
     email: '',
-    senha: ''
+    senha: '',
+    fail: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
-    return state;
+    
+    if(action.type === 'success'){
+        return { ...state, nome: '', senha: '' }    
+    }
+    state[action.type] = action.payload;
+    return { ...state }
+    
 }
