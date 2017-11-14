@@ -22,6 +22,7 @@ class Login extends Component {
                 <View style={styles.container.form.view}>
                     <TextInput value={this.props.email} placeholderTextColor='#fff' placeholder="E-mail" onChangeText={texto => this.props.setEmail(texto) } style={styles.container.form.input}/>
                     <TextInput  value={this.props.senha} placeholderTextColor='#fff' secureTextEntry placeholder="Senha" style={styles.container.form.input} onChangeText={texto => this.props.setSenha(texto) } style={styles.container.form.input}/>
+                    <Text style={{color: 'red', fontSize: 18, backgroundColor: 'transparent'}}>{ this.props.fail }</Text>
                     <TouchableHighlight onPress = {() => Actions.cadastro() }>
                         <Text style={styles.container.form.text}>Não tem cadastro? Cadastre-se!</Text>
                     </TouchableHighlight>
@@ -89,7 +90,8 @@ const styles = {
 const mapStateToProps = state => {
     return ({
         email: state.AuthReducer.email,
-        senha: state.AuthReducer.senha
+        senha: state.AuthReducer.senha,
+        fail: state.AuthReducer.signInUserFail
     });
 };
 

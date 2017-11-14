@@ -27,7 +27,7 @@ export const cadUser = ({ nome, email, senha }) => {
             let id = b64.encode(email);
             firebase.database().ref(`/contatos/${id}`)
                 .push({ nome, email })
-                .then(value => cadUserOk(dispatch));
+                .then(value => cadUserSuccess(dispatch));
             
         })
         .catch(error => cadUserFail(error, dispatch));
@@ -36,25 +36,36 @@ export const cadUser = ({ nome, email, senha }) => {
 export const authUser = ({ email, senha }) => {
     return dispatch => {
         firebase.auth().signInWithEmailAndPassword(email, senha)
-        .then(user => {
-            let id = b64.encode(email);
-            firebase.database().ref(`/contatos/${id}`)
-                .push({ nome, email })
-                .then(value => cadUserOk(dispatch));
-            
-        })
-        .catch(error => cadUserFail(error, dispatch));
+        .then(value => signInUserSuccess(dispatch))
+        .catch(error => signInUserFail(error, dispatch));
     }
 }
-const cadUserOk = (dispatch) => {
+const cadUserSuccess = (dispatch) => {
     dispatch ({
-        type: 'success'
+        type: 'cadUserSuccess',
+        reset: {
+            nome: '',
+            senha:''
+        }
     });
     Actions.inicio();
 }
 const cadUserFail = (error, dispatch) => {
-dispatch({
-    type: 'fail',
-    payload:error.message
-});
+    dispatch({
+        type: 'cadUserFail',
+        payload: error.message
+    });
+}
+const signInUserSuccess = (dispatch) => {
+    dispatch({
+        type: 'signInUserSuccess'
+    });
+    Actions.conversas();
+}
+const signInUserFail = (error, dispatch) => {
+    console.log(error)
+    dispatch({
+        type: 'signInUserFail',
+        payload: error.message
+    });
 }
