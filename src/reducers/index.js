@@ -3,9 +3,11 @@ import { combineReducers } from 'redux';
 
 const INITIAL_STATE = {
     nome: '',
-    email: 'arnom@teste.com',
-    senha: '123123',
-    signInUserFail: ''
+    email: '',
+    senha: '',
+    signInUserFail: '',
+    cadUserFail: '',
+    waiting: false
 };
 
 let AuthReducer = (state = INITIAL_STATE, action) => {

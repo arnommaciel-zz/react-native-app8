@@ -1,27 +1,32 @@
 import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import b64 from 'base-64';
+import types from './types';
 
 export const setEmail = (texto) => {
     return {
-        type: 'email',
+        type: types.email,
         payload: texto
     }
 }
 export const setSenha = (texto) => {
     return {
-        type: 'senha',
+        type: types.password,
         payload: texto
     }
 }
 export const setNome = (texto) => {
     return {
-        type: 'nome',
+        type: types.name,
         payload: texto
     }
 }
 export const cadUser = ({ nome, email, senha }) => {
     return dispatch => {
+        dispatch({
+            type:types.waiting,
+            payload: true
+        });
         firebase.auth().createUserWithEmailAndPassword(email, senha)
         .then(user => {
             let id = b64.encode(email);
@@ -35,6 +40,11 @@ export const cadUser = ({ nome, email, senha }) => {
 }
 export const authUser = ({ email, senha }) => {
     return dispatch => {
+        dispatch({
+            type:types.waiting,
+            payload: true
+        });
+
         firebase.auth().signInWithEmailAndPassword(email, senha)
         .then(value => signInUserSuccess(dispatch))
         .catch(error => signInUserFail(error, dispatch));
@@ -42,30 +52,39 @@ export const authUser = ({ email, senha }) => {
 }
 const cadUserSuccess = (dispatch) => {
     dispatch ({
-        type: 'cadUserSuccess',
+        type: types.cad_user_success,
         reset: {
             nome: '',
-            senha:''
+            senha:'',
+            waiting: false
         }
     });
     Actions.inicio();
 }
 const cadUserFail = (error, dispatch) => {
     dispatch({
-        type: 'cadUserFail',
-        payload: error.message
+        type: types.cad_user_fail,
+        payload: error.message,
+        reset:{
+            waiting: false
+        }
     });
 }
 const signInUserSuccess = (dispatch) => {
     dispatch({
-        type: 'signInUserSuccess'
+        type: types.sign_in_user_success,
+        reset:{
+            waiting: false
+        }
     });
     Actions.conversas();
 }
 const signInUserFail = (error, dispatch) => {
-    console.log(error)
     dispatch({
-        type: 'signInUserFail',
-        payload: error.message
+        type: types.sign_in_user_fail,
+        payload: error.message,
+        reset:{
+            waiting: false
+        }
     });
 }

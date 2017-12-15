@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TextInput, TouchableHighlight, Image} from 'react-native';
+import {View, Text, TextInput, TouchableHighlight, Image, ActivityIndicator} from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { setEmail, setSenha, setNome, cadUser } from '../actions/AuthActions';
@@ -12,6 +12,19 @@ class Cadastro extends Component {
     _cadUser() {
         const { nome, email, senha } = this.props
         this.props.cadUser({ nome, email, senha });
+    }
+
+    renderBtnCadastrar(){
+        if(this.props.waiting){
+            return(
+                <ActivityIndicator size="large"/>
+            );
+        }
+        return (
+            <TouchableHighlight onPress={() => this._cadUser()} style={cadastro.button.touchable}>
+                <Text style={cadastro.button.text}>Cadastrar</Text>
+            </TouchableHighlight>
+        )
     }
     render() {
         return(
@@ -27,9 +40,7 @@ class Cadastro extends Component {
                     <Text style={{color: 'red', fontSize: 18, backgroundColor: 'transparent'}}>{ this.props.fail }</Text>
                 </View>
                 <View style={cadastro.button.view}>
-                    <TouchableHighlight onPress={() => this._cadUser()} style={cadastro.button.touchable}>
-                        <Text style={cadastro.button.text}>Cadastrar</Text>
-                    </TouchableHighlight>
+                    {this.renderBtnCadastrar()}
                 </View>
             </View>
         );
@@ -86,7 +97,8 @@ const mapStateToProps = state => {
         nome: state.AuthReducer.nome,
         email: state.AuthReducer.email,
         senha: state.AuthReducer.senha,
-        fail: state.AuthReducer.fail
+        fail: state.AuthReducer.fail,
+        waiting: state.AuthReducer.waiting
     });
 };
 

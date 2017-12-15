@@ -1,79 +1,49 @@
-
 import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
-import { connect } from 'react-redux';
+import { View, StyleSheet, Dimensions } from 'react-native';
+import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 
-class Conversas extends Component {
+const initialLayout = {
+  height: 0,
+  width: Dimensions.get('window').width,
+};
 
-    render(){
-        return(
-            <View style={container.view}>
-                <Image style={{position: 'absolute'}} source={require('../../assets/img/bg.png')}/>
-                <View style={container.title.view}>
-                    <Text style={container.title.text}>WhatsMesseger</Text>
-                </View>
-                <View style={container.form.view}>
-                    <Text style={container.form.text}>Conversas</Text>
-                </View>
-            </View>
-        );
-    }
+const FirstRoute = () => <View style={[ styles.container, { backgroundColor: '#ff4081' } ]} />;
+const SecondRoute = () => <View style={[ styles.container, { backgroundColor: '#673ab7' } ]} />;
+
+export default class Conversas extends Component {
+  state = {
+    index: 0,
+    routes: [
+      { key: 'first', title: 'First' },
+      { key: 'second', title: 'Second' },
+    ],
+  };
+
+  _handleIndexChange = index => this.setState({ index });
+
+  _renderHeader = props => <TabBar {...props} />;
+
+  _renderScene = SceneMap({
+    first: FirstRoute,
+    second: SecondRoute,
+  });
+
+  render() {
+    return (
+      <TabViewAnimated
+        style={styles.container}
+        navigationState={this.state}
+        renderScene={this._renderScene}
+        renderHeader={this._renderHeader}
+        onIndexChange={this._handleIndexChange}
+        initialLayout={initialLayout}
+      />
+    );
+  }
 }
 
-const container = {
-    view: {
-        flex: 1,
-        padding: 10
-    },
-    title: {
-        view: {
-            justifyContent: 'center',
-            alignItems: 'center',
-            flex: 1,
-            backgroundColor: 'transparent'
-        },
-        text: {
-            fontSize: 25,
-            color: '#fff',
-            fontWeight: 'bold'
-        }
-    },
-    form: {
-        view: {
-            flex: 2
-        },
-        input: {
-            height: 45,
-            fontSize: 20
-        },
-        text: {
-            fontSize: 20,
-            color: '#fff'
-        }
-    },
-    button: {
-        view: {
-            flex: 2
-        },
-        touchable: {
-            padding: 10,
-            backgroundColor: "#115e54"
-        },
-        text: {
-            textAlign: 'center',
-            color: "#fff",
-            fontWeight: 'bold',
-            fontSize: 18
-        }
-    }
-};
-
-const mapStateToProps = state => {
-    return ({
-        email: state.AuthReducer.email,
-        senha: state.AuthReducer.senha,
-        fail: state.AuthReducer.signInUserFail
-    });
-};
-
-export default connect(mapStateToProps, { })(Conversas);
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

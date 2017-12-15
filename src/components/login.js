@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableHighlight, Image } from 'react-native';
+import { View, Text, TextInput, TouchableHighlight, Image, ActivityIndicator } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { setEmail, setSenha, authUser } from '../actions/AuthActions';
@@ -12,6 +12,18 @@ class Login extends Component {
         this.props.authUser({ email, senha });
     }
 
+    renderBtnAcessar(){
+        if(this.props.waiting){
+            return(
+                <ActivityIndicator size="large"/>
+            );
+        }
+        return (
+            <TouchableHighlight onPress = {() => this._authUser()} style={styles.container.button.touchable}>
+                <Text style={styles.container.button.text}>Acessar</Text>
+            </TouchableHighlight>
+        )
+    }
     render(){
         return(
             <View style={styles.container.view}>
@@ -28,9 +40,7 @@ class Login extends Component {
                     </TouchableHighlight>
                 </View>
                 <View style={styles.container.button.view}>
-                    <TouchableHighlight onPress = {() => this._authUser()} style={styles.container.button.touchable}>
-                        <Text style={styles.container.button.text}>Acessar</Text>
-                    </TouchableHighlight>
+                    {this.renderBtnAcessar()}
                 </View>
             </View>
         );
@@ -91,7 +101,8 @@ const mapStateToProps = state => {
     return ({
         email: state.AuthReducer.email,
         senha: state.AuthReducer.senha,
-        fail: state.AuthReducer.signInUserFail
+        fail: state.AuthReducer.signInUserFail,
+        waiting: state.AuthReducer.waiting
     });
 };
 
